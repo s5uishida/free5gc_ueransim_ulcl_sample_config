@@ -1,0 +1,1 @@
+# free5gc_ueransim_ulcl_sample_config
