@@ -81,7 +81,7 @@ The UE routing topology is as follows.
 The communication paths to be confirmed for each destination IP address are as follows.
 | Destination IP address | Communication path |
 | --- | --- |
-| google.com | PSA-UPF --> Internet |
+| google.com | I-UPF --> PSA-UPF --> Internet |
 | 8.8.8.8 | I-UPF --> Internet |
 | 172.17.0.1 | I-UPF --> 172.17.0.0/16 (Docker network on local) |
 
