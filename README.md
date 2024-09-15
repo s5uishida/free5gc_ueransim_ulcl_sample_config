@@ -56,7 +56,7 @@ The 5GC / UE / RAN used are as follows.
 - UE / RAN - UERANSIM v3.2.6 (2024.08.27) - https://github.com/aligungr/UERANSIM
 
 Each VMs are as follows.  
-| VM # | SW & Role | IP address | OS | Memory (Min) | HDD (Min) |
+| VM # | SW & Role | IP address | OS | Mem (Min) | HDD (Min) |
 | --- | --- | --- | --- | --- | --- |
 | VM1 | free5GC  5GC C-Plane | 192.168.0.141/24 | Ubuntu 24.04 | 2GB | 20GB |
 | VM2 | free5GC  5GC U-Plane (I-UPF) | 192.168.0.142/24 | Ubuntu 24.04 | 1GB | 10GB |
