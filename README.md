@@ -24,6 +24,7 @@ This describes a very simple configuration that uses free5GC and UERANSIM for UL
   - [Network settings of free5GC 5GC U-Plane (I-UPF)](#network_settings_up1)
   - [Network settings of free5GC 5GC U-Plane (PSA-UPF)](#network_settings_up2)
 - [Build free5GC and UERANSIM](#build)
+  - [Build go-upf](#build_upf)
 - [Run free5GC 5GC and UERANSIM UE / RAN](#run)
   - [Run free5GC 5GC U-Plane (I-UPF & PSA-UPF)](#run_up)
   - [Run free5GC 5GC C-Plane](#run_cp)
