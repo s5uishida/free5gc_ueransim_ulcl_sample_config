@@ -79,7 +79,9 @@ DN is as follows.
 | 10.60.0.0/16 | upfgtp | internet | uesimtun0 |
 
 The UE routing topology is as follows.
-- **UE** -- **gNodeB** -- **I-UPF** -- **PSA-UPF**
+```
+UE --- gNodeB --- I-UPF --- PSA-UPF
+```
 
 The communication paths to be confirmed for each destination IP address are as follows.
 | Destination IP address | Communication path |
