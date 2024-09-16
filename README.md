@@ -1,7 +1,7 @@
 # free5GC 5GC & UERANSIM UE / RAN Sample Configuration - ULCL(Uplink Classifier)
 This describes a very simple configuration that uses free5GC and UERANSIM for ULCL(Uplink Classifier).  
 **Note. According to [this](https://forum.free5gc.org/t/access-to-local-dn-through-i-upf-in-ulcl-scenario/2512/4), the ULCL feature in free5GC v3.4.0 or later versions won’t work due to the lack of forwarding parameters in FAR creation.
-Therefore, ULCL is confirmed here using the specified version of go-upf (free5GC UPF). Alternatively, you may use [NextMN-UPF](https://github.com/nextmn/upf) as UPF to confirm ULCL.**
+Therefore, ULCL is confirmed here using the specified version of [go-upf](https://github.com/free5gc/go-upf) (free5GC UPF). Alternatively, you may use [NextMN-UPF](https://github.com/nextmn/upf) as UPF to confirm ULCL.**
 
 ---
 
