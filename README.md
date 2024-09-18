@@ -1,7 +1,5 @@
 # free5GC 5GC & UERANSIM UE / RAN Sample Configuration - ULCL(Uplink Classifier)
 This describes a very simple configuration that uses free5GC and UERANSIM for ULCL(Uplink Classifier).  
-**Note. According to [this](https://forum.free5gc.org/t/access-to-local-dn-through-i-upf-in-ulcl-scenario/2512/4), the ULCL feature in free5GC v3.4.0 or later versions won’t work due to the lack of forwarding parameters in FAR creation.
-Therefore, ULCL is confirmed here using the specified version of [go-upf](https://github.com/free5gc/go-upf) (free5GC UPF). Alternatively, you may use [NextMN-UPF](https://github.com/nextmn/upf) as UPF to confirm ULCL.**
 
 ---
 
@@ -52,7 +50,7 @@ The built simulation environment is as follows.
 
 The 5GC / UE / RAN used are as follows.
 - 5GC - free5GC v3.4.3 (2024.09.12) - https://github.com/free5gc/free5gc
-- UPF - go-upf v1.2.1 (2023.12.19) - https://github.com/free5gc/go-upf
+- UPF - go-upf v1.2.3 (2024.05.11) - https://github.com/free5gc/go-upf
 - (UPF) - gtp5g v0.8.10 (2024.06.03) - https://github.com/free5gc/gtp5g
 - UE / RAN - UERANSIM v3.2.6 (2024.08.27) - https://github.com/aligungr/UERANSIM
 
@@ -97,7 +95,7 @@ The communication paths to be confirmed for each destination IP address are as f
 
 Please refer to the following for building free5GC and UERANSIM respectively.
 - free5GC v3.4.3 (2024.09.12) - https://free5gc.org/guide/
-- go-upf v1.2.1 (2023.12.19) - https://free5gc.org/guide/
+- go-upf v1.2.3 (2024.05.11) - https://free5gc.org/guide/
 - gtp5g v0.8.10 (2024.06.03) - https://free5gc.org/guide/
 - UERANSIM v3.2.6 (2024.08.27) - https://github.com/aligungr/UERANSIM/wiki/Installation
 
@@ -514,7 +512,7 @@ Next, configure NAPT.
 
 Please refer to the following for building free5GC and UERANSIM respectively.
 - free5GC v3.4.3 (2024.09.12) - https://free5gc.org/guide/
-- go-upf v1.2.1 (2023.12.19) - https://free5gc.org/guide/
+- go-upf v1.2.3 (2024.05.11) - https://free5gc.org/guide/
 - gtp5g v0.8.10 (2024.06.03) - https://free5gc.org/guide/
 - UERANSIM v3.2.6 (2024.08.27) - https://github.com/aligungr/UERANSIM/wiki/Installation
 
@@ -522,7 +520,8 @@ Install MongoDB on free5GC 5GC C-Plane machine.
 It is not necessary to install MongoDB on free5GC 5GC U-Plane machines.
 [MongoDB Compass](https://www.mongodb.com/products/compass) is a convenient tool to look at the MongoDB database.
 
-**Note. The installation guide also includes instructions on building the latest committed version.**
+**Note. The installation guide also includes instructions on building the latest committed version.
+If it doesn't work properly and you suspect some bug, try updating all NFs by following this update procedure.**
 
 <a id="build_upf"></a>
 
@@ -531,7 +530,7 @@ It is not necessary to install MongoDB on free5GC 5GC U-Plane machines.
 For UPF, select the go-upf version that enables ULCL with the free5GC version selected this time.
 Please refer to the free5GC guide at the above URL for building free5GC UPF. Below show only the differences in the procedure.
 ```
-# git clone -b v1.2.1 https://github.com/free5gc/go-upf.git
+# git clone -b v1.2.3 https://github.com/free5gc/go-upf.git
 # cd go-upf
 # CGO_ENABLED=0 go build -o upf cmd/main.go
 # ls upf
@@ -626,19 +625,19 @@ https://github.com/aligungr/UERANSIM/wiki/Usage
 ```
 # ./nr-gnb -c ../config/free5gc-gnb.yaml
 UERANSIM v3.2.6
-[2024-09-15 20:16:45.677] [sctp] [info] Trying to establish SCTP connection... (192.168.0.141:38412)
-[2024-09-15 20:16:45.690] [sctp] [info] SCTP connection established (192.168.0.141:38412)
-[2024-09-15 20:16:45.691] [sctp] [debug] SCTP association setup ascId[4]
-[2024-09-15 20:16:45.692] [ngap] [debug] Sending NG Setup Request
-[2024-09-15 20:16:45.705] [ngap] [debug] NG Setup Response received
-[2024-09-15 20:16:45.705] [ngap] [info] NG Setup procedure is successful
+[2024-09-18 20:25:19.464] [sctp] [info] Trying to establish SCTP connection... (192.168.0.141:38412)
+[2024-09-18 20:25:19.477] [sctp] [info] SCTP connection established (192.168.0.141:38412)
+[2024-09-18 20:25:19.479] [sctp] [debug] SCTP association setup ascId[4]
+[2024-09-18 20:25:19.480] [ngap] [debug] Sending NG Setup Request
+[2024-09-18 20:25:19.495] [ngap] [debug] NG Setup Response received
+[2024-09-18 20:25:19.496] [ngap] [info] NG Setup procedure is successful
 ```
 The free5GC C-Plane log when executed is as follows.
 ```
-2024-09-15T20:16:45.678092559+09:00 [INFO][AMF][Ngap] [AMF] SCTP Accept from: 192.168.0.131:40751
-2024-09-15T20:16:45.681412529+09:00 [INFO][AMF][Ngap] Create a new NG connection for: 192.168.0.131:40751
-2024-09-15T20:16:45.686132914+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle NGSetupRequest
-2024-09-15T20:16:45.686692209+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Send NG-Setup response
+2024-09-18T20:25:19.484017097+09:00 [INFO][AMF][Ngap] [AMF] SCTP Accept from: 192.168.0.131:46054
+2024-09-18T20:25:19.487421209+09:00 [INFO][AMF][Ngap] Create a new NG connection for: 192.168.0.131:46054
+2024-09-18T20:25:19.493483395+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle NGSetupRequest
+2024-09-18T20:25:19.494240597+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Send NG-Setup response
 ```
 
 <a id="run_ue"></a>
@@ -660,396 +659,403 @@ Ping the following three destination IP addresses and confirm that they are rout
 ```
 # ./nr-ue -c ../config/free5gc-ue.yaml
 UERANSIM v3.2.6
-[2024-09-15 20:17:45.161] [nas] [info] UE switches to state [MM-DEREGISTERED/PLMN-SEARCH]
-[2024-09-15 20:17:45.163] [rrc] [debug] New signal detected for cell[1], total [1] cells in coverage
-[2024-09-15 20:17:45.164] [nas] [info] Selected plmn[001/01]
-[2024-09-15 20:17:45.165] [rrc] [info] Selected cell plmn[001/01] tac[1] category[SUITABLE]
-[2024-09-15 20:17:45.166] [nas] [info] UE switches to state [MM-DEREGISTERED/PS]
-[2024-09-15 20:17:45.166] [nas] [info] UE switches to state [MM-DEREGISTERED/NORMAL-SERVICE]
-[2024-09-15 20:17:45.166] [nas] [debug] Initial registration required due to [MM-DEREG-NORMAL-SERVICE]
-[2024-09-15 20:17:45.167] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
-[2024-09-15 20:17:45.167] [nas] [debug] Sending Initial Registration
-[2024-09-15 20:17:45.167] [rrc] [debug] Sending RRC Setup Request
-[2024-09-15 20:17:45.168] [nas] [info] UE switches to state [MM-REGISTER-INITIATED]
-[2024-09-15 20:17:45.170] [rrc] [info] RRC connection established
-[2024-09-15 20:17:45.170] [rrc] [info] UE switches to state [RRC-CONNECTED]
-[2024-09-15 20:17:45.170] [nas] [info] UE switches to state [CM-CONNECTED]
-[2024-09-15 20:17:45.289] [nas] [debug] Authentication Request received
-[2024-09-15 20:17:45.289] [nas] [debug] Received SQN [00000000003A]
-[2024-09-15 20:17:45.289] [nas] [debug] SQN-MS [000000000000]
-[2024-09-15 20:17:45.318] [nas] [debug] Security Mode Command received
-[2024-09-15 20:17:45.318] [nas] [debug] Selected integrity[2] ciphering[0]
-[2024-09-15 20:17:45.471] [nas] [debug] Registration accept received
-[2024-09-15 20:17:45.471] [nas] [info] UE switches to state [MM-REGISTERED/NORMAL-SERVICE]
-[2024-09-15 20:17:45.471] [nas] [debug] Sending Registration Complete
-[2024-09-15 20:17:45.471] [nas] [info] Initial Registration is successful
-[2024-09-15 20:17:45.471] [nas] [debug] Sending PDU Session Establishment Request
-[2024-09-15 20:17:45.471] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
-[2024-09-15 20:17:45.681] [nas] [debug] Configuration Update Command received
-[2024-09-15 20:17:45.868] [nas] [debug] PDU Session Establishment Accept received
-[2024-09-15 20:17:45.868] [nas] [info] PDU Session establishment is successful PSI[1]
-[2024-09-15 20:17:45.891] [app] [info] Connection setup for PDU session[1] is successful, TUN interface[uesimtun0, 10.60.0.1] is up.
+[2024-09-18 20:26:07.587] [nas] [info] UE switches to state [MM-DEREGISTERED/PLMN-SEARCH]
+[2024-09-18 20:26:07.589] [rrc] [debug] New signal detected for cell[1], total [1] cells in coverage
+[2024-09-18 20:26:07.591] [nas] [info] Selected plmn[001/01]
+[2024-09-18 20:26:07.591] [rrc] [info] Selected cell plmn[001/01] tac[1] category[SUITABLE]
+[2024-09-18 20:26:07.591] [nas] [info] UE switches to state [MM-DEREGISTERED/PS]
+[2024-09-18 20:26:07.592] [nas] [info] UE switches to state [MM-DEREGISTERED/NORMAL-SERVICE]
+[2024-09-18 20:26:07.592] [nas] [debug] Initial registration required due to [MM-DEREG-NORMAL-SERVICE]
+[2024-09-18 20:26:07.593] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2024-09-18 20:26:07.594] [nas] [debug] Sending Initial Registration
+[2024-09-18 20:26:07.595] [rrc] [debug] Sending RRC Setup Request
+[2024-09-18 20:26:07.595] [nas] [info] UE switches to state [MM-REGISTER-INITIATED]
+[2024-09-18 20:26:07.597] [rrc] [info] RRC connection established
+[2024-09-18 20:26:07.597] [rrc] [info] UE switches to state [RRC-CONNECTED]
+[2024-09-18 20:26:07.597] [nas] [info] UE switches to state [CM-CONNECTED]
+[2024-09-18 20:26:07.697] [nas] [debug] Authentication Request received
+[2024-09-18 20:26:07.697] [nas] [debug] Received SQN [000000000042]
+[2024-09-18 20:26:07.697] [nas] [debug] SQN-MS [000000000000]
+[2024-09-18 20:26:07.726] [nas] [debug] Security Mode Command received
+[2024-09-18 20:26:07.726] [nas] [debug] Selected integrity[2] ciphering[0]
+[2024-09-18 20:26:07.884] [nas] [debug] Registration accept received
+[2024-09-18 20:26:07.884] [nas] [info] UE switches to state [MM-REGISTERED/NORMAL-SERVICE]
+[2024-09-18 20:26:07.884] [nas] [debug] Sending Registration Complete
+[2024-09-18 20:26:07.884] [nas] [info] Initial Registration is successful
+[2024-09-18 20:26:07.884] [nas] [debug] Sending PDU Session Establishment Request
+[2024-09-18 20:26:07.885] [nas] [debug] UAC access attempt is allowed for identity[0], category[MO_sig]
+[2024-09-18 20:26:08.093] [nas] [debug] Configuration Update Command received
+[2024-09-18 20:26:08.298] [nas] [debug] PDU Session Establishment Accept received
+[2024-09-18 20:26:08.298] [nas] [info] PDU Session establishment is successful PSI[1]
+[2024-09-18 20:26:08.319] [app] [info] Connection setup for PDU session[1] is successful, TUN interface[uesimtun0, 10.60.0.1] is up.
 ```
 The free5GC C-Plane log when executed is as follows.
 ```
-2024-09-15T20:17:45.170868990+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle InitialUEMessage
-2024-09-15T20:17:45.171451544+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] New RanUe [RanUeNgapID:1][AmfUeNgapID:1]
-2024-09-15T20:17:45.171905327+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] 5GSMobileIdentity ["SUCI":"suci-0-001-01-0000-0-0-0000000000", err: <nil>]
-2024-09-15T20:17:45.175443379+09:00 [INFO][AMF][CTX] New AmfUe [supi:][guti:00101cafe0000000001]
-2024-09-15T20:17:45.176634358+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [Deregistered] to [Deregistered]
-2024-09-15T20:17:45.177534027+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Handle Registration Request
-2024-09-15T20:17:45.177796423+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] RegistrationType: Initial Registration
-2024-09-15T20:17:45.178848979+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] MobileIdentity5GS: SUCI[suci-0-001-01-0000-0-0-0000000000]
-2024-09-15T20:17:45.178924521+09:00 [INFO][AMF][Gmm] Handle event[Start Authentication], transition from [Deregistered] to [Authentication]
-2024-09-15T20:17:45.178970520+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Authentication procedure
-2024-09-15T20:17:45.182804265+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.189249656+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.200025455+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.204083524+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.207417696+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&target-nf-type=AUSF |
-2024-09-15T20:17:45.211011101+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.215179232+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.223973770+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.228176910+09:00 [INFO][AUSF][UeAuth] HandleUeAuthPostRequest
-2024-09-15T20:17:45.228287657+09:00 [INFO][AUSF][UeAuth] Serving network authorized
-2024-09-15T20:17:45.229885185+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.232231135+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.237894854+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.239651761+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.241983467+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AUSF&service-names=nudm-ueau&target-nf-type=UDM |
-2024-09-15T20:17:45.243552581+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.245202186+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.251571106+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.253855257+09:00 [INFO][UDM][UEAU] Handle GenerateAuthDataRequest
-2024-09-15T20:17:45.255409864+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.257575761+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.262439826+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.265462705+09:00 [INFO][UDM][Suci] suciPart: [suci 0 001 01 0000 0 0 0000000000]
-2024-09-15T20:17:45.265737300+09:00 [INFO][UDM][Suci] scheme 0
-2024-09-15T20:17:45.265759505+09:00 [INFO][UDM][Suci] SUPI type is IMSI
+2024-09-18T20:26:07.632688035+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle InitialUEMessage
+2024-09-18T20:26:07.632822271+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] New RanUe [RanUeNgapID:1][AmfUeNgapID:1]
+2024-09-18T20:26:07.632925869+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] 5GSMobileIdentity ["SUCI":"suci-0-001-01-0000-0-0-0000000000", err: <nil>]
+2024-09-18T20:26:07.636024889+09:00 [INFO][AMF][CTX] New AmfUe [supi:][guti:00101cafe0000000001]
+2024-09-18T20:26:07.637780236+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [Deregistered] to [Deregistered]
+2024-09-18T20:26:07.638610707+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Handle Registration Request
+2024-09-18T20:26:07.638686787+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] RegistrationType: Initial Registration
+2024-09-18T20:26:07.639211373+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] MobileIdentity5GS: SUCI[suci-0-001-01-0000-0-0-0000000000]
+2024-09-18T20:26:07.640046263+09:00 [INFO][AMF][Gmm] Handle event[Start Authentication], transition from [Deregistered] to [Authentication]
+2024-09-18T20:26:07.640144354+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Authentication procedure
+2024-09-18T20:26:07.643066359+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.649613275+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.660253767+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.665570430+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.669855280+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&target-nf-type=AUSF |
+2024-09-18T20:26:07.672875975+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.676998230+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.686053063+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.689595567+09:00 [INFO][AUSF][UeAuth] HandleUeAuthPostRequest
+2024-09-18T20:26:07.690922488+09:00 [INFO][AUSF][UeAuth] Serving network authorized
+2024-09-18T20:26:07.692305174+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.693399113+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.697907865+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.699205166+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.700478804+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AUSF&service-names=nudm-ueau&target-nf-type=UDM |
+2024-09-18T20:26:07.701165015+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.702192448+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.705194883+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.706627221+09:00 [INFO][UDM][UEAU] Handle GenerateAuthDataRequest
+2024-09-18T20:26:07.707487385+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.708747193+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.711649944+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.712055752+09:00 [INFO][UDM][Suci] suciPart: [suci 0 001 01 0000 0 0 0000000000]
+2024-09-18T20:26:07.712283815+09:00 [INFO][UDM][Suci] scheme 0
+2024-09-18T20:26:07.712384480+09:00 [INFO][UDM][Suci] SUPI type is IMSI
 http://127.0.0.10:8000
-2024-09-15T20:17:45.266673359+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.268767248+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.272096485+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.273551329+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.274689830+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=UDM&target-nf-type=UDR |
-2024-09-15T20:17:45.277722823+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/authentication-data/authentication-subscription |
-2024-09-15T20:17:45.278843232+09:00 [INFO][UDM][UEAU] Nil Op
-2024-09-15T20:17:45.281544082+09:00 [INFO][UDR][GIN] | 204 |       127.0.0.1 | PATCH   | /nudr-dr/v1/subscription-data/imsi-001010000000000/authentication-data/authentication-subscription |
-2024-09-15T20:17:45.282208457+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | POST    | /nudm-ueau/v1/suci-0-001-01-0000-0-0-0000000000/security-information/generate-auth-data |
-2024-09-15T20:17:45.282566429+09:00 [INFO][AUSF][UeAuth] Add SuciSupiPair (suci-0-001-01-0000-0-0-0000000000, imsi-001010000000000) to map.
-2024-09-15T20:17:45.283033338+09:00 [INFO][AUSF][UeAuth] Use 5G AKA auth method
-2024-09-15T20:17:45.283242418+09:00 [INFO][AUSF][5gAka] XresStar = 3862343536383931363461303064643633633439323237363364643335663435
-2024-09-15T20:17:45.283365221+09:00 [INFO][AUSF][GIN] | 201 |       127.0.0.1 | POST    | /nausf-auth/v1/ue-authentications |
-2024-09-15T20:17:45.284281240+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Send Authentication Request
-2024-09-15T20:17:45.284374906+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Send Downlink Nas Transport
-2024-09-15T20:17:45.285170965+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Start T3560 timer
-2024-09-15T20:17:45.286672679+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport
-2024-09-15T20:17:45.286967436+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
-2024-09-15T20:17:45.287359745+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [Authentication] to [Authentication]
-2024-09-15T20:17:45.287656670+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Handle Authentication Response
-2024-09-15T20:17:45.287943800+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Stop T3560 timer
-2024-09-15T20:17:45.288840555+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.290528898+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.293854168+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.295408329+09:00 [INFO][AUSF][5gAka] Auth5gAkaComfirmRequest
-2024-09-15T20:17:45.295871411+09:00 [INFO][AUSF][5gAka] res*: 3862343536383931363461303064643633633439323237363364643335663435
-Xres*: 3862343536383931363461303064643633633439323237363364643335663435
-2024-09-15T20:17:45.296423324+09:00 [INFO][AUSF][5gAka] 5G AKA confirmation succeeded
-2024-09-15T20:17:45.297104247+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.298012825+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.301669706+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.303158077+09:00 [INFO][UDM][UEAU] Handle ConfirmAuthDataRequest
-2024-09-15T20:17:45.304131050+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.305430739+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.308713584+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.311855112+09:00 [INFO][UDR][GIN] | 204 |       127.0.0.1 | PUT     | /nudr-dr/v1/subscription-data/imsi-001010000000000/authentication-data/authentication-status |
-2024-09-15T20:17:45.312159183+09:00 [INFO][UDM][GIN] | 201 |       127.0.0.1 | POST    | /nudm-ueau/v1/imsi-001010000000000/auth-events |
-2024-09-15T20:17:45.312831382+09:00 [INFO][AUSF][GIN] | 200 |       127.0.0.1 | PUT     | /nausf-auth/v1/ue-authentications/suci-0-001-01-0000-0-0-0000000000/5g-aka-confirmation |
-2024-09-15T20:17:45.313507187+09:00 [INFO][AMF][Gmm] Handle event[Authentication Success], transition from [Authentication] to [SecurityMode]
-2024-09-15T20:17:45.313726904+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Send Security Mode Command
-2024-09-15T20:17:45.313806488+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Send Downlink Nas Transport
-2024-09-15T20:17:45.314530996+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Start T3560 timer
-2024-09-15T20:17:45.316636785+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport
-2024-09-15T20:17:45.317150437+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
-2024-09-15T20:17:45.317476701+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [SecurityMode] to [SecurityMode]
-2024-09-15T20:17:45.317844869+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle Security Mode Complete
-2024-09-15T20:17:45.318145752+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Stop T3560 timer
-2024-09-15T20:17:45.318692307+09:00 [INFO][AMF][Gmm] Handle event[SecurityMode Success], transition from [SecurityMode] to [ContextSetup]
-2024-09-15T20:17:45.318865110+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle InitialRegistration
-2024-09-15T20:17:45.320209326+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.321857463+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.324717788+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.325624912+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.326693768+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&supi=imsi-001010000000000&target-nf-type=UDM |
-2024-09-15T20:17:45.327428224+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.328753137+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.332154826+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.333581550+09:00 [INFO][UDM][SDM] Handle GetNssai
-2024-09-15T20:17:45.334538700+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.335886188+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.339271310+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.340625060+09:00 [INFO][UDR][DataRepo] QueryAmDataProcedure: ueId: imsi-001010000000000, servingPlmnId: 00101
-2024-09-15T20:17:45.341276859+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/am-data |
-2024-09-15T20:17:45.341750055+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/nssai?plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
-2024-09-15T20:17:45.342177832+09:00 [INFO][AMF][Gmm] RequestedNssai: &{Iei:47 Len:5 Buffer:[4 1 1 2 3]}
-2024-09-15T20:17:45.342232236+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] RequestedNssai - ServingSnssai: &{Sst:1 Sd:010203}, HomeSnssai: <nil>
-2024-09-15T20:17:45.342912976+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.345118313+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.347738062+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.350485689+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.351668722+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&supi=imsi-001010000000000&target-nf-type=UDM |
-2024-09-15T20:17:45.352450013+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.353848009+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.357115379+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.358345522+09:00 [INFO][UDM][UECM] Handle RegistrationAmf3gppAccess
-2024-09-15T20:17:45.358667457+09:00 [INFO][UDM][UECM] UEID: imsi-001010000000000
-2024-09-15T20:17:45.359521603+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.360662063+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.363647756+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.369060990+09:00 [INFO][UDR][GIN] | 204 |       127.0.0.1 | PUT     | /nudr-dr/v1/subscription-data/imsi-001010000000000/context-data/amf-3gpp-access |
-2024-09-15T20:17:45.369193794+09:00 [INFO][UDM][GIN] | 201 |       127.0.0.1 | PUT     | /nudm-uecm/v1/imsi-001010000000000/registrations/amf-3gpp-access |
-2024-09-15T20:17:45.370214505+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.371730089+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.374957453+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.375994598+09:00 [INFO][UDM][SDM] Handle GetAmData
-2024-09-15T20:17:45.376852096+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.377924029+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.380848387+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.381837139+09:00 [INFO][UDR][DataRepo] QueryAmDataProcedure: ueId: imsi-001010000000000, servingPlmnId: 00101
-2024-09-15T20:17:45.382529840+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/am-data?supported-features=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
-2024-09-15T20:17:45.382944495+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/am-data?plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
-2024-09-15T20:17:45.384828736+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.387274937+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.391157036+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.392456297+09:00 [INFO][UDM][SDM] Handle GetSmfSelectData
-2024-09-15T20:17:45.393244409+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.394411386+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.397399378+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.398865756+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/smf-selection-subscription-data |
-2024-09-15T20:17:45.399235344+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/smf-select-data?plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
-2024-09-15T20:17:45.400387523+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.401701551+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.405397509+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.408320339+09:00 [INFO][UDM][SDM] Handle GetUeContextInSmfData
-2024-09-15T20:17:45.409263836+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.410491466+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.413466929+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.414989996+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/context-data/smf-registrations |
-2024-09-15T20:17:45.415517377+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/ue-context-in-smf-data |
-2024-09-15T20:17:45.416587293+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.417824432+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.421103907+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.422320907+09:00 [INFO][UDM][SDM] Handle Subscribe
-2024-09-15T20:17:45.422888596+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.424009391+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.426961380+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.428225405+09:00 [INFO][UDR][GIN] | 201 |       127.0.0.1 | POST    | /nudr-dr/v1/subscription-data/imsi-001010000000000/context-data/sdm-subscriptions |
-2024-09-15T20:17:45.428940128+09:00 [INFO][UDM][GIN] | 201 |       127.0.0.1 | POST    | /nudm-sdm/v1/imsi-001010000000000/sdm-subscriptions |
-2024-09-15T20:17:45.429848976+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.431151326+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.433914106+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.434750939+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.435900122+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?preferred-locality=area1&requester-nf-type=AMF&supi=imsi-001010000000000&target-nf-type=PCF |
-2024-09-15T20:17:45.436568844+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.437646315+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.440680443+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.442616991+09:00 [INFO][PCF][AmPol] Handle AM Policy Create Request
-2024-09-15T20:17:45.443481360+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.444571359+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.447101673+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.447991351+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.448896537+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=PCF&target-nf-type=UDR |
-2024-09-15T20:17:45.449542306+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.450701724+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.453707592+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.455498109+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/policy-data/ues/imsi-001010000000000/am-data |
-2024-09-15T20:17:45.456627564+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.458701473+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.461250918+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.463473932+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.464701346+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?guami=%7B%22plmnId%22%3A%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D%2C%22amfId%22%3A%22cafe00%22%7D&requester-nf-type=PCF&target-nf-type=AMF |
-2024-09-15T20:17:45.465515890+09:00 [INFO][PCF][GIN] | 201 |       127.0.0.1 | POST    | /npcf-am-policy-control/v1/policies |
-2024-09-15T20:17:45.466158536+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Send Registration Accept
-2024-09-15T20:17:45.466213521+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Send Initial Context Setup Request
-2024-09-15T20:17:45.467592138+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Start T3550 timer
-2024-09-15T20:17:45.468392030+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle InitialContextSetupResponse
-2024-09-15T20:17:45.468679798+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Handle InitialContextSetupResponse (RAN UE NGAP ID: 1)
-2024-09-15T20:17:45.673526450+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport
-2024-09-15T20:17:45.673822852+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
-2024-09-15T20:17:45.673978052+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [ContextSetup] to [ContextSetup]
-2024-09-15T20:17:45.674008840+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle Registration Complete
-2024-09-15T20:17:45.674031860+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Stop T3550 timer
-2024-09-15T20:17:45.674092517+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Send Configuration Update Command
-2024-09-15T20:17:45.674117289+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Send Downlink Nas Transport
-2024-09-15T20:17:45.676927320+09:00 [INFO][AMF][Gmm] Handle event[ContextSetup Success], transition from [ContextSetup] to [Registered]
-2024-09-15T20:17:45.681107363+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport
-2024-09-15T20:17:45.681259535+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
-2024-09-15T20:17:45.681563826+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [Registered] to [Registered]
-2024-09-15T20:17:45.682799323+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle UL NAS Transport
-2024-09-15T20:17:45.682912614+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Transport 5GSM Message to SMF
-2024-09-15T20:17:45.683072327+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Select SMF [snssai: {Sst:1 Sd:010203}, dnn: internet]
-2024-09-15T20:17:45.686021084+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.691972851+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.703060695+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.705459705+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.708919458+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&target-nf-type=NSSF |
-2024-09-15T20:17:45.710647050+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.714729354+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.723302671+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.727066706+09:00 [INFO][NSSF][NsSel] Handle NSSelectionGet
-2024-09-15T20:17:45.727239014+09:00 [WARN][NSSF][Util] No TA {"plmnId":{"mcc":"001","mnc":"01"},"tac":"000001"} in NSSF configuration
-2024-09-15T20:17:45.728379313+09:00 [INFO][NSSF][GIN] | 200 |       127.0.0.1 | GET     | /nnssf-nsselection/v1/network-slice-information?nf-id=76cd45a4-ebbe-465a-a5ed-567658ad960c&nf-type=AMF&slice-info-request-for-pdu-session=%7B%22sNssai%22%3A%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D%2C%22roamingIndication%22%3A%22NON_ROAMING%22%7D&tai=%7B%22plmnId%22%3A%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D%2C%22tac%22%3A%22000001%22%7D |
-2024-09-15T20:17:45.730074401+09:00 [WARN][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] nsiInformation is still nil, use default NRF[http://127.0.0.10:8000]
-2024-09-15T20:17:45.731656635+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.734520091+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.739188738+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.740242668+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.742489928+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?dnn=internet&preferred-locality=area1&requester-nf-type=AMF&service-names=nsmf-pdusession&snssais=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D&target-nf-type=SMF&target-plmn-list=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
-2024-09-15T20:17:45.744212311+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.745139856+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.749223106+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.750799969+09:00 [INFO][SMF][PduSess] Receive Create SM Context Request
-2024-09-15T20:17:45.751650292+09:00 [INFO][SMF][PduSess] In HandlePDUSessionSMContextCreate
-2024-09-15T20:17:45.751953807+09:00 [INFO][SMF][CTX] UrrPeriod: 30s
-2024-09-15T20:17:45.752328348+09:00 [INFO][SMF][CTX] UrrThreshold: 500000
-2024-09-15T20:17:45.753106835+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.754262198+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.756746408+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.757603384+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.758739489+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=SMF&target-nf-type=UDM |
-2024-09-15T20:17:45.759344094+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Send NF Discovery Serving UDM Successfully
-2024-09-15T20:17:45.760812767+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.762691355+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.765924445+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.767075704+09:00 [INFO][UDM][SDM] Handle GetSmData
-2024-09-15T20:17:45.767855253+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.768988057+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.771981674+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.772514414+09:00 [INFO][UDM][SDM] getSmDataProcedure: SUPI[imsi-001010000000000] PLMNID[00101] DNN[internet] SNssai[{"sst":1,"sd":"010203"}]
-2024-09-15T20:17:45.774157632+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/sm-data?single-nssai=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D |
-2024-09-15T20:17:45.774859677+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/sm-data?dnn=internet&plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D&single-nssai=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D |
-2024-09-15T20:17:45.775406716+09:00 [INFO][SMF][GSM] In HandlePDUSessionEstablishmentRequest
-2024-09-15T20:17:45+09:00 [INFO][NAS][Convert] ProtocolOrContainerList:  [0xc0002de080 0xc0002de0a0]
-2024-09-15T20:17:45.775896510+09:00 [INFO][SMF][GSM] Protocol Configuration Options
-2024-09-15T20:17:45.775945449+09:00 [INFO][SMF][GSM] &{[0xc0002de080 0xc0002de0a0]}
-2024-09-15T20:17:45.775977628+09:00 [INFO][SMF][GSM] Didn't Implement container type IPAddressAllocationViaNASSignallingUL
-2024-09-15T20:17:45.776546574+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.777628500+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.780044179+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.780945323+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.782322536+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=SMF&target-nf-instance-id=76cd45a4-ebbe-465a-a5ed-567658ad960c&target-nf-type=AMF |
-2024-09-15T20:17:45.783014137+09:00 [INFO][SMF][Consumer] SendNFDiscoveryServingAMF ok
-2024-09-15T20:17:45.783178743+09:00 [INFO][SMF][CTX] Allocated UE IP address: 10.60.0.1
-2024-09-15T20:17:45.783218673+09:00 [INFO][SMF][CTX] Selected UPF: PSA-UPF
-2024-09-15T20:17:45.783521051+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.784658928+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.787175803+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.787928493+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.789081572+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?preferred-locality=area1&requester-nf-type=SMF&target-nf-type=PCF |
-2024-09-15T20:17:45.789809565+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.790884483+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.794107637+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.795514662+09:00 [INFO][PCF][SMpolicy] Handle CreateSmPolicy
-2024-09-15T20:17:45.796547763+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.798017498+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.800919346+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.803580755+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/policy-data/ues/imsi-001010000000000/sm-data?dnn=internet&snssai=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D |
-2024-09-15T20:17:45.808072270+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.811070375+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.815112482+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.816864995+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/application-data/influenceData?dnns=internet&internal-Group-Ids=&snssais=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D&supis=imsi-001010000000000 |
-2024-09-15T20:17:45.817291638+09:00 [INFO][PCF][SMpolicy] Matched [0] trafficInfluDatas from UDR
-2024-09-15T20:17:45.818094962+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.819424054+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.822164593+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.823382712+09:00 [INFO][UDR][GIN] | 201 |       127.0.0.1 | POST    | /nudr-dr/v1/application-data/influenceData/subs-to-notify |
-2024-09-15T20:17:45.824208556+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.825533833+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.828042354+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.828861936+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.829502337+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=PCF&target-nf-type=BSF |
-2024-09-15T20:17:45.830502453+09:00 [INFO][PCF][GIN] | 201 |       127.0.0.1 | POST    | /npcf-smpolicycontrol/v1/sm-policies |
-2024-09-15T20:17:45.831607754+09:00 [INFO][SMF][PduSess] CHF Selection for SMContext SUPI[imsi-001010000000000] PDUSessionID[1]
-2024-09-15T20:17:45.832090774+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.833172464+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.835690297+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.836489863+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
-2024-09-15T20:17:45.837327636+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=SMF&target-nf-type=CHF |
-2024-09-15T20:17:45.837758221+09:00 [INFO][SMF][Charging] Handle SendConvergedChargingRequest
-2024-09-15T20:17:45.838173068+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.839318331+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.842166677+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.846118412+09:00 [INFO][CHF][ChargingPost] HandleChargingdataInitial
-2024-09-15T20:17:45.846420906+09:00 [INFO][CHF][ChargingPost] SMF charging event
-2024-09-15T20:17:45.846774302+09:00 [ERRO][CHF][ChargingPost] Charging gateway fail to send CDR to billing domain dial tcp 127.0.0.1:2121: connect: connection refused
-2024-09-15T20:17:45.846829529+09:00 [INFO][CHF][ChargingPost] Open CDR for UE imsi-001010000000000
-2024-09-15T20:17:45.846963549+09:00 [INFO][CHF][ChargingPost] NewChfUe imsi-001010000000000
-2024-09-15T20:17:45.847189853+09:00 [INFO][CHF][GIN] | 201 |       127.0.0.1 | POST    | /nchf-convergedcharging/v3/chargingdata |
-2024-09-15T20:17:45.847863970+09:00 [INFO][SMF][Charging] Send Charging Data Request[Init] successfully
-2024-09-15T20:17:45.848178832+09:00 [INFO][SMF][CTX] No Default Data Path
-2024-09-15T20:17:45.848508143+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Install PCCRule[PccRuleId-2]
-2024-09-15T20:17:45.848548601+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] No srcTcData and tgtTcData. Nothing to do
-2024-09-15T20:17:45.848585588+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Install PCCRule[PccRuleId-1]
-2024-09-15T20:17:45.848600623+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] No srcTcData and tgtTcData. Nothing to do
-2024-09-15T20:17:45.848819170+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Has pre-config route
-2024-09-15T20:17:45.849365889+09:00 [INFO][SMF][GIN] | 201 |       127.0.0.1 | POST    | /nsmf-pdusession/v1/sm-contexts |
-2024-09-15T20:17:45.849691742+09:00 [INFO][SMF][PduSess] Sending PFCP Session Establishment Request
-2024-09-15T20:17:45.849696044+09:00 [INFO][SMF][PduSess] Sending PFCP Session Establishment Request
-2024-09-15T20:17:45.850977730+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] create smContext[pduSessionID: 1] Success
-2024-09-15T20:17:45.853143779+09:00 [INFO][SMF][PduSess] Received PFCP Session Establishment Accepted Response
-2024-09-15T20:17:45.853416517+09:00 [INFO][SMF][PduSess] Received PFCP Session Establishment Accepted Response
-2024-09-15T20:17:45.855267273+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.856644179+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.860324807+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.862300334+09:00 [INFO][AMF][Producer] Handle N1N2 Message Transfer Request
-2024-09-15T20:17:45.862474459+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Send PDU Session Resource Setup Request
-2024-09-15T20:17:45.863509872+09:00 [INFO][AMF][GIN] | 200 |       127.0.0.1 | POST    | /namf-comm/v1/ue-contexts/imsi-001010000000000/n1-n2-messages |
-2024-09-15T20:17:45.865628262+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:40751] Handle PDUSessionResourceSetupResponse
-2024-09-15T20:17:45.865937548+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:40751] Handle PDUSessionResourceSetupResponse (RAN UE NGAP ID: 1)
-2024-09-15T20:17:45.866933428+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
-2024-09-15T20:17:45.868292586+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
-2024-09-15T20:17:45.871678318+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
-2024-09-15T20:17:45.873283309+09:00 [INFO][SMF][PduSess] Receive Update SM Context Request
-2024-09-15T20:17:45.875688984+09:00 [INFO][SMF][PduSess] Received PFCP Session Modification Accepted Response from AN UPF
-2024-09-15T20:17:45.875746988+09:00 [INFO][SMF][PFCP] Add PSAAndULCL
-2024-09-15T20:17:45.875759746+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] In AddPDUSessionAnchorAndULCL
-2024-09-15T20:17:45.875969259+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Establish PSA2
-2024-09-15T20:17:45.876192940+09:00 [INFO][SMF][PduSess] In EstablishULCL
-2024-09-15T20:17:45.876334715+09:00 [INFO][SMF][PFCP] [SMF] Establish ULCL msg has been send
-2024-09-15T20:17:45.876653667+09:00 [INFO][SMF][PduSess] Sending PFCP Session Modification Request
-2024-09-15T20:17:45.878786491+09:00 [INFO][SMF][PduSess] Received PFCP Session Modification Response
-2024-09-15T20:17:45.878941385+09:00 [INFO][SMF][CTX] [SMF] Add PSA success
-2024-09-15T20:17:45.878991323+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Establish PSA2
-2024-09-15T20:17:45.879141516+09:00 [INFO][SMF][PduSess] In EstablishULCL
-2024-09-15T20:17:45.879332704+09:00 [INFO][SMF][PFCP] [SMF] Establish ULCL msg has been send
-2024-09-15T20:17:45.879449822+09:00 [INFO][SMF][PduSess] Sending PFCP Session Modification Request
-2024-09-15T20:17:45.881673996+09:00 [INFO][SMF][PduSess] Received PFCP Session Modification Response
-2024-09-15T20:17:45.881911707+09:00 [INFO][SMF][CTX] [SMF] Add PSA success
-2024-09-15T20:17:45.882250236+09:00 [INFO][SMF][GIN] | 200 |       127.0.0.1 | POST    | /nsmf-pdusession/v1/sm-contexts/urn:uuid:66239e21-c3f1-45d7-a235-da5196b30dad/modify |
+2024-09-18T20:26:07.713056795+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.715967655+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.718523474+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.720207873+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.721226276+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=UDM&target-nf-type=UDR |
+2024-09-18T20:26:07.723653123+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/authentication-data/authentication-subscription |
+2024-09-18T20:26:07.724697132+09:00 [INFO][UDM][UEAU] Nil Op
+2024-09-18T20:26:07.726834549+09:00 [INFO][UDR][GIN] | 204 |       127.0.0.1 | PATCH   | /nudr-dr/v1/subscription-data/imsi-001010000000000/authentication-data/authentication-subscription |
+2024-09-18T20:26:07.727028221+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | POST    | /nudm-ueau/v1/suci-0-001-01-0000-0-0-0000000000/security-information/generate-auth-data |
+2024-09-18T20:26:07.727288482+09:00 [INFO][AUSF][UeAuth] Add SuciSupiPair (suci-0-001-01-0000-0-0-0000000000, imsi-001010000000000) to map.
+2024-09-18T20:26:07.727320202+09:00 [INFO][AUSF][UeAuth] Use 5G AKA auth method
+2024-09-18T20:26:07.727334723+09:00 [INFO][AUSF][5gAka] XresStar = 3665656633323565623938363365653836613363623562383737616431343162
+2024-09-18T20:26:07.727421796+09:00 [INFO][AUSF][GIN] | 201 |       127.0.0.1 | POST    | /nausf-auth/v1/ue-authentications |
+2024-09-18T20:26:07.728059414+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Send Authentication Request
+2024-09-18T20:26:07.728501625+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Send Downlink Nas Transport
+2024-09-18T20:26:07.729165472+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Start T3560 timer
+2024-09-18T20:26:07.730499503+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport
+2024-09-18T20:26:07.730838881+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
+2024-09-18T20:26:07.731163005+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [Authentication] to [Authentication]
+2024-09-18T20:26:07.731473475+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Handle Authentication Response
+2024-09-18T20:26:07.731492975+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:] Stop T3560 timer
+2024-09-18T20:26:07.732242401+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.733850314+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.736800533+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.739445743+09:00 [INFO][AUSF][5gAka] Auth5gAkaComfirmRequest
+2024-09-18T20:26:07.739489986+09:00 [INFO][AUSF][5gAka] res*: 3665656633323565623938363365653836613363623562383737616431343162
+Xres*: 3665656633323565623938363365653836613363623562383737616431343162
+2024-09-18T20:26:07.739508456+09:00 [INFO][AUSF][5gAka] 5G AKA confirmation succeeded
+2024-09-18T20:26:07.739960332+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.741745014+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.745290578+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.746808662+09:00 [INFO][UDM][UEAU] Handle ConfirmAuthDataRequest
+2024-09-18T20:26:07.747788376+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.749203692+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.752332219+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.754540517+09:00 [INFO][UDR][GIN] | 204 |       127.0.0.1 | PUT     | /nudr-dr/v1/subscription-data/imsi-001010000000000/authentication-data/authentication-status |
+2024-09-18T20:26:07.755134610+09:00 [INFO][UDM][GIN] | 201 |       127.0.0.1 | POST    | /nudm-ueau/v1/imsi-001010000000000/auth-events |
+2024-09-18T20:26:07.755520583+09:00 [INFO][AUSF][GIN] | 200 |       127.0.0.1 | PUT     | /nausf-auth/v1/ue-authentications/suci-0-001-01-0000-0-0-0000000000/5g-aka-confirmation |
+2024-09-18T20:26:07.756298383+09:00 [INFO][AMF][Gmm] Handle event[Authentication Success], transition from [Authentication] to [SecurityMode]
+2024-09-18T20:26:07.756407178+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Send Security Mode Command
+2024-09-18T20:26:07.757227561+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Send Downlink Nas Transport
+2024-09-18T20:26:07.757939334+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Start T3560 timer
+2024-09-18T20:26:07.759400747+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport
+2024-09-18T20:26:07.759747020+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
+2024-09-18T20:26:07.760089322+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [SecurityMode] to [SecurityMode]
+2024-09-18T20:26:07.760241963+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle Security Mode Complete
+2024-09-18T20:26:07.760257305+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Stop T3560 timer
+2024-09-18T20:26:07.760281094+09:00 [INFO][AMF][Gmm] Handle event[SecurityMode Success], transition from [SecurityMode] to [ContextSetup]
+2024-09-18T20:26:07.760288303+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle InitialRegistration
+2024-09-18T20:26:07.761021270+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.762479001+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.765250663+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.766122422+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.767011349+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&supi=imsi-001010000000000&target-nf-type=UDM |
+2024-09-18T20:26:07.767688441+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.768963745+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.772577525+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.773970597+09:00 [INFO][UDM][SDM] Handle GetNssai
+2024-09-18T20:26:07.775053173+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.776575367+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.779764263+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.781825852+09:00 [INFO][UDR][DataRepo] QueryAmDataProcedure: ueId: imsi-001010000000000, servingPlmnId: 00101
+2024-09-18T20:26:07.784778525+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/am-data |
+2024-09-18T20:26:07.786320190+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/nssai?plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
+2024-09-18T20:26:07.787566579+09:00 [INFO][AMF][Gmm] RequestedNssai: &{Iei:47 Len:5 Buffer:[4 1 1 2 3]}
+2024-09-18T20:26:07.787641212+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] RequestedNssai - ServingSnssai: &{Sst:1 Sd:010203}, HomeSnssai: <nil>
+2024-09-18T20:26:07.788476126+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.790941882+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.793633004+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.794537905+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.795842313+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&supi=imsi-001010000000000&target-nf-type=UDM |
+2024-09-18T20:26:07.797171961+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.798975509+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.802728209+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.804624352+09:00 [INFO][UDM][UECM] Handle RegistrationAmf3gppAccess
+2024-09-18T20:26:07.805019730+09:00 [INFO][UDM][UECM] UEID: imsi-001010000000000
+2024-09-18T20:26:07.805931520+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.806980341+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.809956417+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.812085590+09:00 [INFO][UDR][GIN] | 204 |       127.0.0.1 | PUT     | /nudr-dr/v1/subscription-data/imsi-001010000000000/context-data/amf-3gpp-access |
+2024-09-18T20:26:07.812206803+09:00 [INFO][UDM][GIN] | 201 |       127.0.0.1 | PUT     | /nudm-uecm/v1/imsi-001010000000000/registrations/amf-3gpp-access |
+2024-09-18T20:26:07.813221243+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.814730153+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.817987677+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.819545000+09:00 [INFO][UDM][SDM] Handle GetAmData
+2024-09-18T20:26:07.820423909+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.821874250+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.825070580+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.826253382+09:00 [INFO][UDR][DataRepo] QueryAmDataProcedure: ueId: imsi-001010000000000, servingPlmnId: 00101
+2024-09-18T20:26:07.827169135+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/am-data?supported-features=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
+2024-09-18T20:26:07.827637730+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/am-data?plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
+2024-09-18T20:26:07.828765031+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.829787994+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.833317342+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.834513245+09:00 [INFO][UDM][SDM] Handle GetSmfSelectData
+2024-09-18T20:26:07.835487152+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.836606356+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.839563009+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.840977827+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/smf-selection-subscription-data |
+2024-09-18T20:26:07.841498829+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/smf-select-data?plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
+2024-09-18T20:26:07.842331417+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.843721384+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.846930179+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.848287196+09:00 [INFO][UDM][SDM] Handle GetUeContextInSmfData
+2024-09-18T20:26:07.849127994+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.850345065+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.853339112+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.854868609+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/context-data/smf-registrations |
+2024-09-18T20:26:07.855261635+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/ue-context-in-smf-data |
+2024-09-18T20:26:07.856284225+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.857621203+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.860852596+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.862254516+09:00 [INFO][UDM][SDM] Handle Subscribe
+2024-09-18T20:26:07.863080024+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.864611595+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.868057100+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.871089460+09:00 [INFO][UDR][GIN] | 201 |       127.0.0.1 | POST    | /nudr-dr/v1/subscription-data/imsi-001010000000000/context-data/sdm-subscriptions |
+2024-09-18T20:26:07.871836455+09:00 [INFO][UDM][GIN] | 201 |       127.0.0.1 | POST    | /nudm-sdm/v1/imsi-001010000000000/sdm-subscriptions |
+2024-09-18T20:26:07.872858305+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.874514863+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.877160918+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.877877174+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.878923667+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?preferred-locality=area1&requester-nf-type=AMF&supi=imsi-001010000000000&target-nf-type=PCF |
+2024-09-18T20:26:07.879640031+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.880819521+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.884464676+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.886537867+09:00 [INFO][PCF][AmPol] Handle AM Policy Create Request
+2024-09-18T20:26:07.887380381+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.888603287+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.891091433+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.891889345+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.892709379+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=PCF&target-nf-type=UDR |
+2024-09-18T20:26:07.893190355+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.894274490+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.897328469+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.898818580+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/policy-data/ues/imsi-001010000000000/am-data |
+2024-09-18T20:26:07.899845269+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.900900267+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.903541545+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.904352144+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:07.905533741+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?guami=%7B%22plmnId%22%3A%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D%2C%22amfId%22%3A%22cafe00%22%7D&requester-nf-type=PCF&target-nf-type=AMF |
+2024-09-18T20:26:07.906890620+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:07.907970989+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:07.911091323+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:07.912491589+09:00 [INFO][AMF][Comm] Handle AMF Status Change Subscribe Request
+2024-09-18T20:26:07.912540218+09:00 [INFO][AMF][Comm] new AMF Status Subscription[1]
+2024-09-18T20:26:07.912584859+09:00 [INFO][AMF][GIN] | 201 |       127.0.0.1 | POST    | /namf-comm/v1/subscriptions |
+2024-09-18T20:26:07.913123219+09:00 [INFO][PCF][GIN] | 201 |       127.0.0.1 | POST    | /npcf-am-policy-control/v1/policies |
+2024-09-18T20:26:07.913685717+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Send Registration Accept
+2024-09-18T20:26:07.913999336+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Send Initial Context Setup Request
+2024-09-18T20:26:07.915418342+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Start T3550 timer
+2024-09-18T20:26:07.916286704+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle InitialContextSetupResponse
+2024-09-18T20:26:07.916461669+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Handle InitialContextSetupResponse (RAN UE NGAP ID: 1)
+2024-09-18T20:26:08.122470807+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport
+2024-09-18T20:26:08.123036234+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
+2024-09-18T20:26:08.123112168+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [ContextSetup] to [ContextSetup]
+2024-09-18T20:26:08.123124641+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle Registration Complete
+2024-09-18T20:26:08.123134748+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Stop T3550 timer
+2024-09-18T20:26:08.123166967+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Send Configuration Update Command
+2024-09-18T20:26:08.123179384+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Send Downlink Nas Transport
+2024-09-18T20:26:08.124427508+09:00 [INFO][AMF][Gmm] Handle event[ContextSetup Success], transition from [ContextSetup] to [Registered]
+2024-09-18T20:26:08.127248938+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport
+2024-09-18T20:26:08.128199436+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Handle UplinkNASTransport (RAN UE NGAP ID: 1)
+2024-09-18T20:26:08.128930708+09:00 [INFO][AMF][Gmm] Handle event[Gmm Message], transition from [Registered] to [Registered]
+2024-09-18T20:26:08.129795661+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Handle UL NAS Transport
+2024-09-18T20:26:08.129857216+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Transport 5GSM Message to SMF
+2024-09-18T20:26:08.129912778+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] Select SMF [snssai: {Sst:1 Sd:010203}, dnn: internet]
+2024-09-18T20:26:08.132971410+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.139676751+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.150864277+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.153846614+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:08.157864192+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=AMF&target-nf-type=NSSF |
+2024-09-18T20:26:08.159964624+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.166161214+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.176383752+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.181645836+09:00 [INFO][NSSF][NsSel] Handle NSSelectionGet
+2024-09-18T20:26:08.182684170+09:00 [WARN][NSSF][Util] No TA {"plmnId":{"mcc":"001","mnc":"01"},"tac":"000001"} in NSSF configuration
+2024-09-18T20:26:08.183371597+09:00 [INFO][NSSF][GIN] | 200 |       127.0.0.1 | GET     | /nnssf-nsselection/v1/network-slice-information?nf-id=96b608e3-15d4-47db-a283-39860b765884&nf-type=AMF&slice-info-request-for-pdu-session=%7B%22sNssai%22%3A%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D%2C%22roamingIndication%22%3A%22NON_ROAMING%22%7D&tai=%7B%22plmnId%22%3A%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D%2C%22tac%22%3A%22000001%22%7D |
+2024-09-18T20:26:08.184544370+09:00 [WARN][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] nsiInformation is still nil, use default NRF[http://127.0.0.10:8000]
+2024-09-18T20:26:08.186222787+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.189118322+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.193706776+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.195255090+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:08.197462457+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?dnn=internet&preferred-locality=area1&requester-nf-type=AMF&service-names=nsmf-pdusession&snssais=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D&target-nf-type=SMF&target-plmn-list=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D |
+2024-09-18T20:26:08.198530983+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.200635575+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.205771506+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.208180968+09:00 [INFO][SMF][PduSess] Receive Create SM Context Request
+2024-09-18T20:26:08.209368924+09:00 [INFO][SMF][PduSess] In HandlePDUSessionSMContextCreate
+2024-09-18T20:26:08.209820343+09:00 [INFO][SMF][CTX] UrrPeriod: 30s
+2024-09-18T20:26:08.210077449+09:00 [INFO][SMF][CTX] UrrThreshold: 500000
+2024-09-18T20:26:08.211005437+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.212777439+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.216063987+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.217075041+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:08.218396565+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=SMF&target-nf-type=UDM |
+2024-09-18T20:26:08.219041521+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Send NF Discovery Serving UDM Successfully
+2024-09-18T20:26:08.219689423+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.220954312+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.224647776+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.226315668+09:00 [INFO][UDM][SDM] Handle GetSmData
+2024-09-18T20:26:08.227199614+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.228721197+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.232080821+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.232557943+09:00 [INFO][UDM][SDM] getSmDataProcedure: SUPI[imsi-001010000000000] PLMNID[00101] DNN[internet] SNssai[{"sst":1,"sd":"010203"}]
+2024-09-18T20:26:08.234811314+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/subscription-data/imsi-001010000000000/00101/provisioned-data/sm-data?single-nssai=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D |
+2024-09-18T20:26:08.235500018+09:00 [INFO][UDM][GIN] | 200 |       127.0.0.1 | GET     | /nudm-sdm/v1/imsi-001010000000000/sm-data?dnn=internet&plmn-id=%7B%22mcc%22%3A%22001%22%2C%22mnc%22%3A%2201%22%7D&single-nssai=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D |
+2024-09-18T20:26:08.236390805+09:00 [INFO][SMF][GSM] In HandlePDUSessionEstablishmentRequest
+2024-09-18T20:26:08+09:00 [INFO][NAS][Convert] ProtocolOrContainerList:  [0xc0002dcf20 0xc0002dcf40]
+2024-09-18T20:26:08.236931651+09:00 [INFO][SMF][GSM] Protocol Configuration Options
+2024-09-18T20:26:08.237372537+09:00 [INFO][SMF][GSM] &{[0xc0002dcf20 0xc0002dcf40]}
+2024-09-18T20:26:08.237578793+09:00 [INFO][SMF][GSM] Didn't Implement container type IPAddressAllocationViaNASSignallingUL
+2024-09-18T20:26:08.238551521+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.239626502+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.242259993+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.243129888+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:08.244421037+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=SMF&target-nf-instance-id=96b608e3-15d4-47db-a283-39860b765884&target-nf-type=AMF |
+2024-09-18T20:26:08.244910170+09:00 [INFO][SMF][Consumer] SendNFDiscoveryServingAMF ok
+2024-09-18T20:26:08.245410741+09:00 [INFO][SMF][CTX] Allocated UE IP address: 10.60.0.1
+2024-09-18T20:26:08.245627427+09:00 [INFO][SMF][CTX] Selected UPF: PSA-UPF
+2024-09-18T20:26:08.246099667+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.247130868+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.249661674+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.250781047+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:08.251642158+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?preferred-locality=area1&requester-nf-type=SMF&target-nf-type=PCF |
+2024-09-18T20:26:08.252672018+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.254763133+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.259168070+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.260393656+09:00 [INFO][PCF][SMpolicy] Handle CreateSmPolicy
+2024-09-18T20:26:08.261244879+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.262811400+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.265816595+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.268036899+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/policy-data/ues/imsi-001010000000000/sm-data?dnn=internet&snssai=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D |
+2024-09-18T20:26:08.272737950+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.274095813+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.277125219+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.278786056+09:00 [INFO][UDR][GIN] | 200 |       127.0.0.1 | GET     | /nudr-dr/v1/application-data/influenceData?dnns=internet&internal-Group-Ids=&snssais=%7B%22sst%22%3A1%2C%22sd%22%3A%22010203%22%7D&supis=imsi-001010000000000 |
+2024-09-18T20:26:08.279095086+09:00 [INFO][PCF][SMpolicy] Matched [0] trafficInfluDatas from UDR
+2024-09-18T20:26:08.279942914+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.281358707+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.284397640+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.285894136+09:00 [INFO][UDR][GIN] | 201 |       127.0.0.1 | POST    | /nudr-dr/v1/application-data/influenceData/subs-to-notify |
+2024-09-18T20:26:08.286762573+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.289522625+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.292067981+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.294361736+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:08.295105422+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=PCF&target-nf-type=BSF |
+2024-09-18T20:26:08.296000968+09:00 [INFO][PCF][GIN] | 201 |       127.0.0.1 | POST    | /npcf-smpolicycontrol/v1/sm-policies |
+2024-09-18T20:26:08.297116374+09:00 [INFO][SMF][PduSess] CHF Selection for SMContext SUPI[imsi-001010000000000] PDUSessionID[1]
+2024-09-18T20:26:08.297951527+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.299169189+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.301610858+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.302407473+09:00 [INFO][NRF][DISC] Handle NFDiscoveryRequest
+2024-09-18T20:26:08.303209308+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | GET     | /nnrf-disc/v1/nf-instances?requester-nf-type=SMF&target-nf-type=CHF |
+2024-09-18T20:26:08.303522083+09:00 [INFO][SMF][Charging] Handle SendConvergedChargingRequest
+2024-09-18T20:26:08.303800028+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.304706321+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.307649125+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.311548011+09:00 [INFO][CHF][ChargingPost] HandleChargingdataInitial
+2024-09-18T20:26:08.311812081+09:00 [INFO][CHF][ChargingPost] SMF charging event
+2024-09-18T20:26:08.312161840+09:00 [ERRO][CHF][ChargingPost] Charging gateway fail to send CDR to billing domain dial tcp 127.0.0.1:2121: connect: connection refused
+2024-09-18T20:26:08.312470483+09:00 [INFO][CHF][ChargingPost] Open CDR for UE imsi-001010000000000
+2024-09-18T20:26:08.312750860+09:00 [INFO][CHF][ChargingPost] NewChfUe imsi-001010000000000
+2024-09-18T20:26:08.313164785+09:00 [INFO][CHF][GIN] | 201 |       127.0.0.1 | POST    | /nchf-convergedcharging/v3/chargingdata |
+2024-09-18T20:26:08.313889068+09:00 [INFO][SMF][Charging] Send Charging Data Request[Init] successfully
+2024-09-18T20:26:08.314342582+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Install PCCRule[PccRuleId-1]
+2024-09-18T20:26:08.314566963+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] No srcTcData and tgtTcData. Nothing to do
+2024-09-18T20:26:08.314790087+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Install PCCRule[PccRuleId-2]
+2024-09-18T20:26:08.314811473+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] No srcTcData and tgtTcData. Nothing to do
+2024-09-18T20:26:08.314859720+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Has pre-config route
+2024-09-18T20:26:08.315232455+09:00 [INFO][SMF][GIN] | 201 |       127.0.0.1 | POST    | /nsmf-pdusession/v1/sm-contexts |
+2024-09-18T20:26:08.315704620+09:00 [INFO][SMF][PduSess] Sending PFCP Session Establishment Request
+2024-09-18T20:26:08.315910457+09:00 [INFO][SMF][PduSess] Sending PFCP Session Establishment Request
+2024-09-18T20:26:08.316273764+09:00 [INFO][AMF][Gmm][amf_ue_ngap_id:RU:1,AU:1(3GPP)][supi:SUPI:imsi-001010000000000] create smContext[pduSessionID: 1] Success
+2024-09-18T20:26:08.318191885+09:00 [INFO][SMF][PduSess] Received PFCP Session Establishment Accepted Response
+2024-09-18T20:26:08.319106567+09:00 [INFO][SMF][PduSess] Received PFCP Session Establishment Accepted Response
+2024-09-18T20:26:08.320856593+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.322058557+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.325421741+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.327230844+09:00 [INFO][AMF][Producer] Handle N1N2 Message Transfer Request
+2024-09-18T20:26:08.327746280+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Send PDU Session Resource Setup Request
+2024-09-18T20:26:08.328816178+09:00 [INFO][AMF][GIN] | 200 |       127.0.0.1 | POST    | /namf-comm/v1/ue-contexts/imsi-001010000000000/n1-n2-messages |
+2024-09-18T20:26:08.330854297+09:00 [INFO][AMF][Ngap][ran_addr:192.168.0.131:46054] Handle PDUSessionResourceSetupResponse
+2024-09-18T20:26:08.331151783+09:00 [INFO][AMF][Ngap][amf_ue_ngap_id:RU:1,AU:1(3GPP)][ran_addr:192.168.0.131:46054] Handle PDUSessionResourceSetupResponse (RAN UE NGAP ID: 1)
+2024-09-18T20:26:08.331961778+09:00 [INFO][NRF][Token] In HTTPAccessTokenRequest
+2024-09-18T20:26:08.333484755+09:00 [WARN][NRF][Token] Certificate verify: x509: certificate signed by unknown authority (possibly because of "x509: invalid signature: parent certificate cannot sign this kind of certificate" while trying to verify candidate authority certificate "free5gc")
+2024-09-18T20:26:08.336701596+09:00 [INFO][NRF][GIN] | 200 |       127.0.0.1 | POST    | /oauth2/token |
+2024-09-18T20:26:08.338103118+09:00 [INFO][SMF][PduSess] Receive Update SM Context Request
+2024-09-18T20:26:08.340326055+09:00 [INFO][SMF][PduSess] Received PFCP Session Modification Accepted Response from AN UPF
+2024-09-18T20:26:08.340587188+09:00 [INFO][SMF][PFCP] Add PSAAndULCL
+2024-09-18T20:26:08.340600318+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] In AddPDUSessionAnchorAndULCL
+2024-09-18T20:26:08.340629015+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Establish PSA2
+2024-09-18T20:26:08.340638067+09:00 [INFO][SMF][PduSess] In EstablishULCL
+2024-09-18T20:26:08.340667495+09:00 [INFO][SMF][PFCP] [SMF] Establish ULCL msg has been send
+2024-09-18T20:26:08.340674189+09:00 [INFO][SMF][PduSess] Sending PFCP Session Modification Request
+2024-09-18T20:26:08.344325528+09:00 [INFO][SMF][PduSess] Received PFCP Session Modification Response
+2024-09-18T20:26:08.344370934+09:00 [INFO][SMF][CTX] [SMF] Add PSA success
+2024-09-18T20:26:08.344427257+09:00 [INFO][SMF][PduSess][pdu_session_id:1][supi:imsi-001010000000000] Establish PSA2
+2024-09-18T20:26:08.344580049+09:00 [INFO][SMF][PduSess] In EstablishULCL
+2024-09-18T20:26:08.344636187+09:00 [INFO][SMF][PFCP] [SMF] Establish ULCL msg has been send
+2024-09-18T20:26:08.344682288+09:00 [INFO][SMF][PduSess] Sending PFCP Session Modification Request
+2024-09-18T20:26:08.346959847+09:00 [INFO][SMF][PduSess] Received PFCP Session Modification Response
+2024-09-18T20:26:08.347220696+09:00 [INFO][SMF][CTX] [SMF] Add PSA success
+2024-09-18T20:26:08.347447790+09:00 [INFO][SMF][GIN] | 200 |       127.0.0.1 | POST    | /nsmf-pdusession/v1/sm-contexts/urn:uuid:b899493b-c294-4c81-ae90-2b35c8bc8e88/modify |
 ```
 The free5GC U-Plane (I-UPF) log when executed is as follows.
 ```
-2024-09-15T20:17:45.856826976+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionEstablishmentRequest
-2024-09-15T20:17:45.856857397+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805][CPNodeID:192.168.0.141][CPSEID:0x1][UPSEID:0x1] New session
-2024-09-15T20:17:45.858045796+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:6 period:30000000000}]
-2024-09-15T20:17:45.858506167+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:5 period:30000000000}]
-2024-09-15T20:17:45.880417145+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionModificationRequest
-2024-09-15T20:17:45.883070859+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionModificationRequest
-2024-09-15T20:17:45.883669424+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:1 period:30000000000}]
-2024-09-15T20:17:45.883955707+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:2 period:30000000000}]
-2024-09-15T20:17:45.885715858+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionModificationRequest
-2024-09-15T20:17:45.886342331+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:1 period:30000000000}]
-2024-09-15T20:17:45.886524176+09:00 [ERRO][UPF][PFCP][LAddr:192.168.0.142:8805][CPNodeID:192.168.0.141][CPSEID:0x1][UPSEID:0x1] Mod CreateURR error: file exists
-2024-09-15T20:17:45.886562714+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:2 period:30000000000}]
-2024-09-15T20:17:45.886814514+09:00 [ERRO][UPF][PFCP][LAddr:192.168.0.142:8805][CPNodeID:192.168.0.141][CPSEID:0x1][UPSEID:0x1] Mod CreateURR error: file exists
+2024-09-18T20:26:08.324560922+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionEstablishmentRequest
+2024-09-18T20:26:08.324590034+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805][CPNodeID:192.168.0.141][CPSEID:0x1][UPSEID:0x1] New session
+2024-09-18T20:26:08.325641181+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:5 period:30000000000}]
+2024-09-18T20:26:08.325830591+09:00 [INFO][UPF][Perio] new ticker [30s]
+2024-09-18T20:26:08.326080274+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:6 period:30000000000}]
+2024-09-18T20:26:08.347054789+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionModificationRequest
+2024-09-18T20:26:08.348803361+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionModificationRequest
+2024-09-18T20:26:08.350750974+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:1 period:30000000000}]
+2024-09-18T20:26:08.351176910+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:2 period:30000000000}]
+2024-09-18T20:26:08.352908387+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.142:8805] handleSessionModificationRequest
+2024-09-18T20:26:08.353610919+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:1 period:30000000000}]
+2024-09-18T20:26:08.353803414+09:00 [ERRO][UPF][PFCP][LAddr:192.168.0.142:8805][CPNodeID:192.168.0.141][CPSEID:0x1][UPSEID:0x1] Mod CreateURR error: file exists
+2024-09-18T20:26:08.353880210+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:2 period:30000000000}]
+2024-09-18T20:26:08.353924199+09:00 [ERRO][UPF][PFCP][LAddr:192.168.0.142:8805][CPNodeID:192.168.0.141][CPSEID:0x1][UPSEID:0x1] Mod CreateURR error: file exists
 ```
 The free5GC U-Plane (PSA-UPF) log when executed is as follows.
 ```
-2024-09-15T20:17:45.851961544+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.143:8805] handleSessionEstablishmentRequest
-2024-09-15T20:17:45.851995844+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.143:8805][CPNodeID:192.168.0.141][CPSEID:0x2][UPSEID:0x1] New session
-2024-09-15T20:17:45.853176719+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:3 period:30000000000}]
-2024-09-15T20:17:45.853543116+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:4 period:30000000000}]
+2024-09-18T20:26:08.282795607+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.143:8805] handleSessionEstablishmentRequest
+2024-09-18T20:26:08.282831771+09:00 [INFO][UPF][PFCP][LAddr:192.168.0.143:8805][CPNodeID:192.168.0.141][CPSEID:0x2][UPSEID:0x1] New session
+2024-09-18T20:26:08.283807070+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:3 period:30000000000}]
+2024-09-18T20:26:08.284000580+09:00 [INFO][UPF][Perio] new ticker [30s]
+2024-09-18T20:26:08.284079651+09:00 [INFO][UPF][Perio] recv event[TYPE_PERIO_ADD][{eType:1 lSeid:1 urrid:4 period:30000000000}]
 ```
 The TUNnel interface `uesimtun0` is created as follows.
 ```
@@ -1059,7 +1065,7 @@ The TUNnel interface `uesimtun0` is created as follows.
     link/none 
     inet 10.60.0.1/32 scope global uesimtun0
        valid_lft forever preferred_lft forever
-    inet6 fe80::9c5d:5daf:d01a:e582/64 scope link stable-privacy 
+    inet6 fe80::81f5:e632:81e2:64af/64 scope link stable-privacy 
        valid_lft forever preferred_lft forever
 ...
 ```
@@ -1072,18 +1078,18 @@ Confirm by using `tcpdump` that the packet goes through `if=upfgtp` on U-Plane (
 ```
 # ping google.com -I uesimtun0 -n
 PING google.com (142.251.222.46) from 10.60.0.1 uesimtun0: 56(84) bytes of data.
-64 bytes from 142.251.222.46: icmp_seq=1 ttl=61 time=20.8 ms
-64 bytes from 142.251.222.46: icmp_seq=2 ttl=61 time=19.6 ms
-64 bytes from 142.251.222.46: icmp_seq=3 ttl=61 time=20.2 ms
+64 bytes from 142.251.222.46: icmp_seq=1 ttl=61 time=21.5 ms
+64 bytes from 142.251.222.46: icmp_seq=2 ttl=61 time=22.6 ms
+64 bytes from 142.251.222.46: icmp_seq=3 ttl=61 time=20.0 ms
 ```
 The `tcpdump` log on U-Plane (PSA-UPF) is as follows.
 ```
-20:24:38.118601 IP 10.60.0.1 > 142.251.222.46: ICMP echo request, id 1317, seq 1, length 64
-20:24:38.137219 IP 142.251.222.46 > 10.60.0.1: ICMP echo reply, id 1317, seq 1, length 64
-20:24:39.119855 IP 10.60.0.1 > 142.251.222.46: ICMP echo request, id 1317, seq 2, length 64
-20:24:39.136643 IP 142.251.222.46 > 10.60.0.1: ICMP echo reply, id 1317, seq 2, length 64
-20:24:40.121205 IP 10.60.0.1 > 142.251.222.46: ICMP echo request, id 1317, seq 3, length 64
-20:24:40.137935 IP 142.251.222.46 > 10.60.0.1: ICMP echo reply, id 1317, seq 3, length 64
+20:34:46.778014 IP 10.60.0.1 > 142.251.222.46: ICMP echo request, id 1410, seq 1, length 64
+20:34:46.797300 IP 142.251.222.46 > 10.60.0.1: ICMP echo reply, id 1410, seq 1, length 64
+20:34:47.781585 IP 10.60.0.1 > 142.251.222.46: ICMP echo request, id 1410, seq 2, length 64
+20:34:47.800842 IP 142.251.222.46 > 10.60.0.1: ICMP echo reply, id 1410, seq 2, length 64
+20:34:48.782556 IP 10.60.0.1 > 142.251.222.46: ICMP echo request, id 1410, seq 3, length 64
+20:34:48.799481 IP 142.251.222.46 > 10.60.0.1: ICMP echo reply, id 1410, seq 3, length 64
 ```
 **Note. Make sure that the packets are not routed from I-UPF to the Internet.**
 
@@ -1095,18 +1101,18 @@ Confirm by using `tcpdump` that the packet goes through `if=upfgtp` on U-Plane (
 ```
 # ping 8.8.8.8 -I uesimtun0 -n
 PING 8.8.8.8 (8.8.8.8) from 10.60.0.1 uesimtun0: 56(84) bytes of data.
-64 bytes from 8.8.8.8: icmp_seq=1 ttl=61 time=15.6 ms
-64 bytes from 8.8.8.8: icmp_seq=2 ttl=61 time=11.4 ms
-64 bytes from 8.8.8.8: icmp_seq=3 ttl=61 time=10.9 ms
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=61 time=11.8 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=61 time=11.9 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=61 time=12.5 ms
 ```
 The `tcpdump` log on U-Plane (I-UPF) is as follows.
 ```
-20:25:30.285541 IP 10.60.0.1 > 8.8.8.8: ICMP echo request, id 1321, seq 1, length 64
-20:25:30.298609 IP 8.8.8.8 > 10.60.0.1: ICMP echo reply, id 1321, seq 1, length 64
-20:25:31.287057 IP 10.60.0.1 > 8.8.8.8: ICMP echo request, id 1321, seq 2, length 64
-20:25:31.296116 IP 8.8.8.8 > 10.60.0.1: ICMP echo reply, id 1321, seq 2, length 64
-20:25:32.288128 IP 10.60.0.1 > 8.8.8.8: ICMP echo request, id 1321, seq 3, length 64
-20:25:32.296667 IP 8.8.8.8 > 10.60.0.1: ICMP echo reply, id 1321, seq 3, length 64
+20:36:04.026119 IP 10.60.0.1 > 8.8.8.8: ICMP echo request, id 1415, seq 1, length 64
+20:36:04.035591 IP 8.8.8.8 > 10.60.0.1: ICMP echo reply, id 1415, seq 1, length 64
+20:36:05.028148 IP 10.60.0.1 > 8.8.8.8: ICMP echo request, id 1415, seq 2, length 64
+20:36:05.037062 IP 8.8.8.8 > 10.60.0.1: ICMP echo reply, id 1415, seq 2, length 64
+20:36:06.028884 IP 10.60.0.1 > 8.8.8.8: ICMP echo request, id 1415, seq 3, length 64
+20:36:06.038058 IP 8.8.8.8 > 10.60.0.1: ICMP echo reply, id 1415, seq 3, length 64
 ```
 **Note. Make sure that the packets are not routed from PSA-UPF to the Internet.**
 
@@ -1118,18 +1124,18 @@ Confirm by using `tcpdump` that the packet goes through `if=upfgtp` on U-Plane (
 ```
 # ping 172.17.0.1 -I uesimtun0 -n
 PING 172.17.0.1 (172.17.0.1) from 10.60.0.1 uesimtun0: 56(84) bytes of data.
-64 bytes from 172.17.0.1: icmp_seq=1 ttl=64 time=2.49 ms
-64 bytes from 172.17.0.1: icmp_seq=2 ttl=64 time=2.27 ms
-64 bytes from 172.17.0.1: icmp_seq=3 ttl=64 time=2.33 ms
+64 bytes from 172.17.0.1: icmp_seq=1 ttl=64 time=2.62 ms
+64 bytes from 172.17.0.1: icmp_seq=2 ttl=64 time=2.46 ms
+64 bytes from 172.17.0.1: icmp_seq=3 ttl=64 time=2.52 ms
 ```
 The `tcpdump` log on U-Plane (I-UPF) is as follows.
 ```
-20:26:12.583405 IP 10.60.0.1 > 172.17.0.1: ICMP echo request, id 1322, seq 1, length 64
-20:26:12.583567 IP 172.17.0.1 > 10.60.0.1: ICMP echo reply, id 1322, seq 1, length 64
-20:26:13.583881 IP 10.60.0.1 > 172.17.0.1: ICMP echo request, id 1322, seq 2, length 64
-20:26:13.583988 IP 172.17.0.1 > 10.60.0.1: ICMP echo reply, id 1322, seq 2, length 64
-20:26:14.584988 IP 10.60.0.1 > 172.17.0.1: ICMP echo request, id 1322, seq 3, length 64
-20:26:14.585102 IP 172.17.0.1 > 10.60.0.1: ICMP echo reply, id 1322, seq 3, length 64
+20:37:07.525065 IP 10.60.0.1 > 172.17.0.1: ICMP echo request, id 1416, seq 1, length 64
+20:37:07.525200 IP 172.17.0.1 > 10.60.0.1: ICMP echo reply, id 1416, seq 1, length 64
+20:37:08.526719 IP 10.60.0.1 > 172.17.0.1: ICMP echo request, id 1416, seq 2, length 64
+20:37:08.526821 IP 172.17.0.1 > 10.60.0.1: ICMP echo reply, id 1416, seq 2, length 64
+20:37:09.527729 IP 10.60.0.1 > 172.17.0.1: ICMP echo request, id 1416, seq 3, length 64
+20:37:09.527832 IP 172.17.0.1 > 10.60.0.1: ICMP echo reply, id 1416, seq 3, length 64
 ```
 **Note. Make sure that the packets are not routed from PSA-UPF to anywhere.**
 
@@ -1141,6 +1147,7 @@ I would like to thank the excellent developers and all the contributors of free5
 
 ## Changelog (summary)
 
+- [2024.09.18] According to [this](https://github.com/free5gc/free5gc/issues/599#issuecomment-2357448799), the bug in the ULCL function of SMF has been fixed, so updated to go-upf v1.2.3.
 - [2024.09.16] Added a note at the beginning that ULCL can be confirmed using [NextMN-UPF](https://github.com/nextmn/upf) as UPF.
 - [2024.09.15] Updated to free5GC v3.4.3 (2024.09.12) and go-upf v1.2.1 (2023.12.19).
 - [2022.08.16] Initial release.
